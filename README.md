@@ -15,6 +15,12 @@ A single-user Next.js app for turning a master song/lyrics document into saved s
 
 ## Setup
 
+Use Node 22 LTS for the most predictable local setup:
+
+```bash
+nvm use
+```
+
 ```bash
 npm install
 cp .env.example .env.local
