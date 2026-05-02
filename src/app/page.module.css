@@ -1,0 +1,381 @@
+.shell {
+  min-height: 100vh;
+  padding: 28px;
+}
+
+.header,
+.importBand,
+.workspace,
+.lowerGrid {
+  margin: 0 auto 18px;
+  max-width: 1680px;
+}
+
+.header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.header h1 {
+  font-size: clamp(2rem, 4vw, 4.25rem);
+  font-weight: 760;
+  line-height: 0.95;
+  margin: 0;
+}
+
+.eyebrow {
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  margin: 0 0 8px;
+  text-transform: uppercase;
+}
+
+.headerActions,
+.builderTop,
+.rowActions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.importBand {
+  align-items: center;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: grid;
+  gap: 14px;
+  grid-template-columns: minmax(190px, 0.6fr) minmax(260px, 1.4fr) auto;
+  padding: 14px;
+}
+
+.importBand div {
+  display: grid;
+  gap: 4px;
+}
+
+.importBand span,
+.muted,
+.savedItem span {
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.workspace {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: minmax(260px, 0.8fr) minmax(540px, 1.9fr) minmax(250px, 0.7fr);
+}
+
+.panel,
+.builder,
+.editor {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  min-width: 0;
+  padding: 16px;
+}
+
+.panelTitle {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.panelTitle h2,
+.setColumn h2 {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.search {
+  align-items: center;
+  background: var(--input);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: flex;
+  gap: 8px;
+  padding: 0 10px;
+}
+
+.search input {
+  border: 0;
+  padding-left: 0;
+}
+
+.songList,
+.savedList {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0;
+  max-height: 58vh;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.songCard {
+  align-items: stretch;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  min-height: 44px;
+  overflow: hidden;
+}
+
+.songCard button,
+.savedItem button {
+  background: transparent;
+  border: 0;
+  color: inherit;
+}
+
+.dragHandle {
+  cursor: grab;
+  font-weight: 700;
+  justify-content: flex-start;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  text-align: left;
+}
+
+.builder {
+  display: grid;
+  gap: 16px;
+}
+
+.builderTop {
+  align-items: stretch;
+}
+
+.showName {
+  flex: 1 1 260px;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.segmented {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: flex;
+  padding: 4px;
+}
+
+.segmented button {
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+}
+
+.segmented .selected {
+  background: var(--accent);
+  color: var(--accentText);
+}
+
+.setGrid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  min-height: 480px;
+}
+
+.setColumn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 460px;
+  padding: 14px;
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.setColumnOver {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 24%, transparent);
+  transform: translateY(-2px);
+}
+
+.setSongs {
+  display: grid;
+  gap: 8px;
+}
+
+.setSong,
+.dragOverlay {
+  background: var(--song);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: grab;
+  font-weight: 760;
+  min-height: 44px;
+  overflow-wrap: anywhere;
+  padding: 12px;
+}
+
+.setSong {
+  align-items: stretch;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: minmax(0, 1fr) 34px;
+  padding: 0;
+}
+
+.setSongHandle {
+  background: transparent;
+  border: 0;
+  color: var(--text);
+  cursor: grab;
+  justify-content: flex-start;
+  min-height: 44px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  padding: 10px 12px;
+  text-align: left;
+}
+
+.removeSongButton {
+  align-self: center;
+  aspect-ratio: 1;
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+  justify-content: center;
+  min-height: 34px;
+  min-width: 34px;
+  padding: 0;
+}
+
+.removeSongButton:hover {
+  color: var(--danger);
+}
+
+.dragOverlay {
+  box-shadow: var(--shadow);
+}
+
+.dragging {
+  opacity: 0.16;
+}
+
+.emptySet {
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+  margin: 0;
+  min-height: 120px;
+  padding: 44px 12px;
+  text-align: center;
+}
+
+.savedItem {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: grid;
+  gap: 4px;
+  grid-template-columns: 1fr auto;
+  padding: 8px;
+}
+
+.savedItem > button:first-child {
+  align-items: flex-start;
+  display: grid;
+  gap: 2px;
+  justify-items: start;
+  text-align: left;
+}
+
+.savedItem a {
+  color: var(--accent);
+  font-size: 0.84rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.deleteButton,
+.iconButton {
+  aspect-ratio: 1;
+  min-width: 40px;
+  padding: 0;
+}
+
+.lowerGrid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: minmax(320px, 1.3fr) minmax(280px, 0.7fr);
+}
+
+.editor {
+  display: grid;
+  gap: 10px;
+}
+
+.editor textarea {
+  min-height: 280px;
+  resize: vertical;
+}
+
+.fullButton {
+  justify-content: center;
+  width: 100%;
+}
+
+.secondaryButton {
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  display: inline-flex;
+  font-weight: 800;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 14px;
+  text-decoration: none;
+}
+
+.dangerButton {
+  background: var(--danger);
+  color: white;
+}
+
+.status {
+  color: var(--accent);
+  font-weight: 800;
+  margin: 0;
+}
+
+@media (max-width: 1100px) {
+  .workspace,
+  .lowerGrid,
+  .importBand {
+    grid-template-columns: 1fr;
+  }
+
+  .setGrid {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .shell {
+    padding: 16px;
+  }
+
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
