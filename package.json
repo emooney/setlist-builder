@@ -7,6 +7,8 @@
     "npm": ">=10"
   },
   "scripts": {
+    "setup": "powershell -ExecutionPolicy Bypass -File ./scripts/setup.ps1",
+    "setup:db": "prisma generate && prisma migrate dev --name init",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

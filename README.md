@@ -21,6 +21,16 @@ Use Node 22 LTS for the most predictable local setup:
 nvm use
 ```
 
+On Windows PowerShell, the one-command setup is:
+
+```powershell
+npm run setup
+```
+
+This installs dependencies, creates `.env.local` if missing, initializes Prisma/SQLite, and starts the dev server.
+
+Manual setup is also available:
+
 ```bash
 npm install
 cp .env.example .env.local
