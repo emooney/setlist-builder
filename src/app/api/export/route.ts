@@ -4,7 +4,8 @@ import { buildSetlistText, createGoogleDoc, createLyricsGoogleDoc } from "@/lib/
 import { prisma } from "@/lib/prisma";
 import { deserializeSetGroups, toSetlist } from "@/lib/setlists";
 import { getSetting } from "@/lib/settings";
-import type { Song } from "@/lib/types";
+import { DEFAULT_GOOGLE_EXPORT_FOLDER_ID } from "@/lib/app-config";
+import { toSong } from "@/lib/songs";
 
 const exportSchema = z.object({
   setlistId: z.string(),
@@ -22,8 +23,8 @@ export async function POST(request: Request) {
     const sets = deserializeSetGroups(setlist.setsJson, setlist.setCount);
     const songIds = [...new Set(sets.flat())];
     const songs = await prisma.song.findMany({ where: { id: { in: songIds } } });
-    const songMap = new Map(songs.map((song) => [song.id, serializeSong(song)]));
-    const folderId = await getSetting("googleFolderId");
+    const songMap = new Map(songs.map((song) => [song.id, toSong(song)]));
+    const folderId = (await getSetting("googleFolderId")) || DEFAULT_GOOGLE_EXPORT_FOLDER_ID;
 
     const setlistDocUrl = await createGoogleDoc(
       `${setlist.name} - Setlist`,
@@ -48,20 +49,4 @@ export async function POST(request: Request) {
     const message = error instanceof Error ? error.message : "Export failed.";
     return NextResponse.json({ error: message }, { status: 500 });
   }
-}
-
-function serializeSong(song: {
-  id: string;
-  title: string;
-  body: string;
-  createdAt: Date;
-  updatedAt: Date;
-}): Song {
-  return {
-    id: song.id,
-    title: song.title,
-    body: song.body,
-    createdAt: song.createdAt.toISOString(),
-    updatedAt: song.updatedAt.toISOString(),
-  };
 }

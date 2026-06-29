@@ -323,8 +323,14 @@
 }
 
 .editor textarea {
-  min-height: 280px;
+  min-height: 180px;
   resize: vertical;
+}
+
+.inlineFields {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .fullButton {

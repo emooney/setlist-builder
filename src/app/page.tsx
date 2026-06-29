@@ -34,9 +34,25 @@ import {
   UploadCloud,
 } from "lucide-react";
 import type { SetGroups, Setlist, Settings, Song } from "@/lib/types";
+import { BAND_NAME, DEFAULT_GOOGLE_EXPORT_FOLDER_URL } from "@/lib/app-config";
 import styles from "./page.module.css";
 
-const emptySong = { id: "new", title: "", body: "" } as Song;
+const emptySong = {
+  id: "new",
+  title: "",
+  artist: "Duran Duran",
+  performedBy: BAND_NAME,
+  lyrics: "",
+  performanceNotes: "",
+  key: "",
+  tempo: "",
+  durationSeconds: null,
+  tags: [],
+  active: true,
+  body: "",
+  createdAt: new Date(0).toISOString(),
+  updatedAt: new Date(0).toISOString(),
+} satisfies Song;
 
 function createEmptySong() {
   return { ...emptySong };
@@ -70,7 +86,12 @@ export default function Home() {
     const needle = query.trim().toLowerCase();
     if (!needle) return songs;
     return songs.filter(
-      (song) => song.title.toLowerCase().includes(needle) || song.body.toLowerCase().includes(needle),
+      (song) =>
+        song.title.toLowerCase().includes(needle) ||
+        song.lyrics.toLowerCase().includes(needle) ||
+        song.performanceNotes.toLowerCase().includes(needle) ||
+        song.key.toLowerCase().includes(needle) ||
+        song.tempo.toLowerCase().includes(needle),
     );
   }, [query, songs]);
   const draggingSong = draggingId ? songMap.get(baseId(draggingId)) : null;
@@ -175,7 +196,18 @@ export default function Home() {
     const response = await fetch(isNew ? "/api/songs" : `/api/songs/${activeSong.id}`, {
       method: isNew ? "POST" : "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: activeSong.title, body: activeSong.body }),
+      body: JSON.stringify({
+        title: activeSong.title,
+        artist: activeSong.artist,
+        performedBy: activeSong.performedBy,
+        lyrics: activeSong.lyrics,
+        performanceNotes: activeSong.performanceNotes,
+        key: activeSong.key,
+        tempo: activeSong.tempo,
+        durationSeconds: activeSong.durationSeconds,
+        tags: activeSong.tags,
+        active: activeSong.active,
+      }),
     });
     const saved = await response.json();
     if (!response.ok) {
@@ -193,7 +225,18 @@ export default function Home() {
     const response = await fetch("/api/songs", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, body: activeSong.body }),
+      body: JSON.stringify({
+        title,
+        artist: activeSong.artist,
+        performedBy: activeSong.performedBy,
+        lyrics: activeSong.lyrics,
+        performanceNotes: activeSong.performanceNotes,
+        key: activeSong.key,
+        tempo: activeSong.tempo,
+        durationSeconds: activeSong.durationSeconds,
+        tags: activeSong.tags,
+        active: activeSong.active,
+      }),
     });
     const saved = await response.json();
     if (!response.ok) {
@@ -215,7 +258,7 @@ export default function Home() {
   }
 
   async function importMaster() {
-    setStatus("Importing master list...");
+    setStatus("Importing into database catalog...");
     const response = await fetch("/api/import", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -282,7 +325,7 @@ export default function Home() {
     <main className={styles.shell}>
       <header className={styles.header}>
         <div>
-          <p className={styles.eyebrow}>The Duran Band</p>
+          <p className={styles.eyebrow}>{BAND_NAME}</p>
           <h1>Setlist Builder</h1>
         </div>
         <div className={styles.headerActions}>
@@ -297,8 +340,8 @@ export default function Home() {
 
       <section className={styles.importBand}>
         <div>
-          <strong>Import master list</strong>
-          <span>Use the Google Doc URL, or paste text if sharing blocks export.</span>
+          <strong>Import / refresh database catalog</strong>
+          <span>Google Docs are import sources only. Saved songs in this database are authoritative for edits and exports.</span>
         </div>
         <input value={importUrl} onChange={(event) => setImportUrl(event.target.value)} placeholder="Google Doc URL" />
         <button onClick={importMaster}>
@@ -321,7 +364,7 @@ export default function Home() {
           <aside className={styles.panel}>
             <div className={styles.panelTitle}>
               <Music size={18} />
-              <h2>Song Catalog</h2>
+              <h2>Database Song Catalog</h2>
             </div>
             <label className={styles.search}>
               <Search size={16} />
@@ -419,10 +462,39 @@ export default function Home() {
             onChange={(event) => setActiveSong({ ...activeSong, title: event.target.value })}
             placeholder="Song title"
           />
+          <div className={styles.inlineFields}>
+            <input
+              value={activeSong.artist}
+              onChange={(event) => setActiveSong({ ...activeSong, artist: event.target.value })}
+              placeholder="Original artist"
+            />
+            <input
+              value={activeSong.performedBy}
+              onChange={(event) => setActiveSong({ ...activeSong, performedBy: event.target.value })}
+              placeholder="Performed by"
+            />
+          </div>
+          <div className={styles.inlineFields}>
+            <input
+              value={activeSong.key}
+              onChange={(event) => setActiveSong({ ...activeSong, key: event.target.value })}
+              placeholder="Key"
+            />
+            <input
+              value={activeSong.tempo}
+              onChange={(event) => setActiveSong({ ...activeSong, tempo: event.target.value })}
+              placeholder="Tempo"
+            />
+          </div>
           <textarea
-            value={activeSong.body}
-            onChange={(event) => setActiveSong({ ...activeSong, body: event.target.value })}
-            placeholder="Lyrics and performance notes"
+            value={activeSong.lyrics}
+            onChange={(event) => setActiveSong({ ...activeSong, lyrics: event.target.value })}
+            placeholder="Lyrics"
+          />
+          <textarea
+            value={activeSong.performanceNotes}
+            onChange={(event) => setActiveSong({ ...activeSong, performanceNotes: event.target.value })}
+            placeholder="Performance notes, cues, arrangement notes"
           />
           <div className={styles.rowActions}>
             <button onClick={saveSong}>Save song</button>
@@ -442,12 +514,15 @@ export default function Home() {
           </div>
           <p className={styles.muted}>
             Google Drive is {settings.googleConnected ? "connected" : "not connected"}. Add OAuth values to `.env.local`
-            before connecting.
+            before connecting. Exports default to {BAND_NAME}&apos;s Drive folder.
+          </p>
+          <p className={styles.muted}>
+            Destination: <a href={DEFAULT_GOOGLE_EXPORT_FOLDER_URL}>{DEFAULT_GOOGLE_EXPORT_FOLDER_URL}</a>
           </p>
           <input
             value={settings.googleFolderId}
             onChange={(event) => void saveFolderId(event.target.value)}
-            placeholder="Optional Google Drive folder ID"
+            placeholder="The Duran Band Google Drive folder ID"
           />
           <textarea
             value={importText}

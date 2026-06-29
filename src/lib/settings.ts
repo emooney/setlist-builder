@@ -1,4 +1,5 @@
 import { prisma } from "./prisma";
+import { DEFAULT_GOOGLE_EXPORT_FOLDER_ID } from "./app-config";
 import type { Settings } from "./types";
 
 export async function getSetting(key: string): Promise<string> {
@@ -21,7 +22,7 @@ export async function getSettings(): Promise<Settings> {
   ]);
 
   return {
-    googleFolderId,
+    googleFolderId: googleFolderId || DEFAULT_GOOGLE_EXPORT_FOLDER_ID,
     googleConnected: Boolean(googleTokens),
   };
 }

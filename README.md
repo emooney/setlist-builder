@@ -56,7 +56,13 @@ The OAuth client needs this authorized redirect URI:
 http://localhost:3000/api/google/callback
 ```
 
-Then use **Connect Drive** in the app. Optionally paste a Google Drive folder ID into Settings to route generated docs into that folder.
+Then use **Connect Drive** in the app. Exports default to The Duran Band Drive folder:
+
+```text
+https://drive.google.com/drive/u/0/folders/1WqTOLlz55XXinGu415JMEQm2gxT-C_aI
+```
+
+You can still paste a different Google Drive folder ID into Settings if this changes later.
 
 ## Scripts
 

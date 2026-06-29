@@ -1,6 +1,15 @@
 export type Song = {
   id: string;
   title: string;
+  artist: string;
+  performedBy: string;
+  lyrics: string;
+  performanceNotes: string;
+  key: string;
+  tempo: string;
+  durationSeconds: number | null;
+  tags: string[];
+  active: boolean;
   body: string;
   createdAt: string;
   updatedAt: string;
@@ -8,7 +17,16 @@ export type Song = {
 
 export type SongInput = {
   title: string;
-  body: string;
+  artist?: string;
+  performedBy?: string;
+  lyrics?: string;
+  performanceNotes?: string;
+  key?: string;
+  tempo?: string;
+  durationSeconds?: number | null;
+  tags?: string[];
+  active?: boolean;
+  body?: string;
 };
 
 export type SetGroups = string[][];

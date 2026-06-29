@@ -4,6 +4,7 @@ import { google } from "googleapis";
 import { getAuthorizedClient } from "@/lib/google";
 import { extractGoogleDocId, parseGoogleDocSongs, parseMasterDoc } from "@/lib/master-doc-parser";
 import { prisma } from "@/lib/prisma";
+import { songInputToData, toSong } from "@/lib/songs";
 
 const importSchema = z.object({
   url: z.string().optional(),
@@ -43,13 +44,13 @@ export async function POST(request: Request) {
       songs.map((song) =>
         prisma.song.upsert({
           where: { title: song.title },
-          create: song,
-          update: { body: song.body },
+          create: songInputToData({ title: song.title, lyrics: song.body }),
+          update: songInputToData({ title: song.title, lyrics: song.body }),
         }),
       ),
     );
 
-    return NextResponse.json({ imported: saved.length, songs: saved });
+    return NextResponse.json({ imported: saved.length, songs: saved.map(toSong) });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Import failed.";
     return NextResponse.json({ error: message }, { status: 500 });

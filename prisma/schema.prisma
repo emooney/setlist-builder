@@ -13,11 +13,20 @@ datasource db {
 }
 
 model Song {
-  id        String   @id @default(cuid())
-  title     String   @unique
-  body      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id               String   @id @default(cuid())
+  title            String   @unique
+  artist           String   @default("Duran Duran")
+  performedBy      String   @default("The Duran Band")
+  lyrics           String   @default("")
+  performanceNotes String   @default("")
+  key              String   @default("")
+  tempo            String   @default("")
+  durationSeconds  Int?
+  tagsJson         String   @default("[]")
+  active           Boolean  @default(true)
+  body             String   @default("")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }
 
 model Setlist {
